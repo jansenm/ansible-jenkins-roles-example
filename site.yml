@@ -78,7 +78,8 @@
 
     # This will create a tomcat instance at CATALINA_BASE
     - { role: "apache/tomcat-8-instance",
-        apache_tomcat_home: "/opt/jenkins/tomcat",
+        catalina_base: "/opt/jenkins/tomcat",
+        catalina_home: "/opt/apache/tomcat/apache-tomcat-8.0.28"
       }
 
     # deploy jenkins to JENKINS_HOME
