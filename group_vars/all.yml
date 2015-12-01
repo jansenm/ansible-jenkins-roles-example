@@ -1,0 +1,3 @@
+ansible_ssh_user: maintenance
+
+download_cache: ~/download

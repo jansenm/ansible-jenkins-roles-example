@@ -1,0 +1,4 @@
+[submodule "roles"]
+	path = roles
+	url = https://github.com/jansenm/ansible-jenkins-roles.git
+	branch = master

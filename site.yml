@@ -1,0 +1,92 @@
+---
+- name: Requirements for jenkins deployment
+  sudo: true
+  hosts: jenkins
+  gather_facts: No
+
+  roles:
+
+    - { role: "os/group"
+       ,name: "jenkins"
+      }
+
+    - { role: "os/user"
+       ,name: "jenkins"
+       ,group: "jenkins"
+       ,comment: "System user for jenkins installation"
+       ,state: "present"
+       ,system: True
+       }
+
+  tasks:
+
+    - name: Create prefix for java
+      file:
+      args:
+        path: "/opt/java"
+        state: "directory"
+        mode: "0755"
+        owner: "root"
+        group: "root"
+
+    - name: Create prefix for tomcat
+      file:
+      args:
+        path: "/opt/apache/tomcat"
+        state: "directory"
+        mode: "0700"
+        owner: "jenkins"
+        group: "jenkins"
+
+    - name: Create prefix for jenkins
+      file:
+      args:
+        path: "/opt/jenkins"
+        state: "directory"
+        mode: "0700"
+        owner: "jenkins"
+        group: "jenkins"
+
+
+- name: Execute java install
+  sudo: true
+  hosts: jenkins
+  gather_facts: No
+
+  vars:
+    apache_tomcat_download_version: "8.0.29"
+
+  roles:
+
+    - { role: "lang/java/oracle",
+      }
+
+- name: Execute jenkins install
+  sudo: true
+  sudo_user: "jenkins"
+  hosts: jenkins
+  gather_facts: No
+
+  vars:
+    - java_home: "/opt/java/jdk1.8.0_65"
+
+  roles:
+
+    # This will download and install tomcat on the remote server to apache_tomcat_prefix
+    - { role: "apache/tomcat-8",
+      }
+
+    # This will create a tomcat instance at CATALINA_BASE
+    - { role: "apache/tomcat-8-instance",
+        apache_tomcat_home: "/opt/jenkins/tomcat",
+      }
+
+    # deploy jenkins to JENKINS_HOME
+    - { role: "jenkins/core",
+        apache_tomcat_home: "/opt/jenkins/tomcat"
+      }
+
+    # install, disable jenkins plugins in JENKINS_HOME
+    - { role: "jenkins/plugins",
+        jenkins_home: "~/.jenkins"
+      }
