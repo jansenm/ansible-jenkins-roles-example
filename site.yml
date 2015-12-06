@@ -54,7 +54,6 @@
   gather_facts: No
 
   vars:
-    apache_tomcat_download_version: "8.0.29"
 
   roles:
 
@@ -69,17 +68,21 @@
 
   vars:
     - java_home: "/opt/java/jdk1.8.0_65"
+    - tomcat_version: 8.0.29
+    - jenkins_version:
 
   roles:
 
     # This will download and install tomcat on the remote server to apache_tomcat_prefix
     - { role: "apache/tomcat-8",
+        tomcat_version: "{{tomcat_version}}",
+        tomcat_checksum: "4b7ba7a5af0a5c395c0740fc011b59d1"
       }
 
     # This will create a tomcat instance at CATALINA_BASE
     - { role: "apache/tomcat-8-instance",
         catalina_base: "/opt/jenkins/tomcat",
-        catalina_home: "/opt/apache/tomcat/apache-tomcat-8.0.28",
+        catalina_home: "/opt/apache/tomcat/apache-tomcat-{{tomcat_version}}",
         # The rest is optional
         server_port: 9009,
         http_connector_port: 8000,
