@@ -69,7 +69,10 @@
   vars:
     - java_home: "/opt/java/jdk1.8.0_65"
     - tomcat_version: 8.0.29
-    - jenkins_version:
+    - jenkins_version: 1.585
+    - jenkins_plugins:
+        - name: role-strategy
+          version: 2.2.0
 
   roles:
 
@@ -91,7 +94,8 @@
 
     # deploy jenkins to JENKINS_HOME
     - { role: "jenkins/core",
-        apache_tomcat_home: "/opt/jenkins/tomcat"
+        tomcat_home: "/opt/jenkins/tomcat",
+        jenkins_home: "~/.jenkins"
       }
 
     # install, disable jenkins plugins in JENKINS_HOME
