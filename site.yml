@@ -73,6 +73,13 @@
     - jenkins_plugins:
         - name: role-strategy
           version: 2.2.0
+    - tomcat_home: "/opt/jenkins/tomcat"
+
+  pre_tasks:
+    - name: STOP TOMCAT
+      # =====================================================================
+      command: "nohup {{tomcat_home}}/bin/catalina.sh stop 2>&1"
+      ignore_errors: true
 
   roles:
 
@@ -102,3 +109,18 @@
     - { role: "jenkins/plugins",
         jenkins_home: "~/.jenkins"
       }
+
+    # Now the configuration begins. Add a administrator user
+    - { role: "jenkins/user",
+        jenkins_home: "~/.jenkins",
+        authentication_strategy: "hudson_private",
+        authorization_strategy: "project_matrix",
+        users: [
+          { id: 'admin', password: 'admin', email: 'admin@example.com'}
+        ]
+        }
+
+  post_tasks:
+    - name: START TOMCAT
+      # =====================================================================
+      command: "nohup {{tomcat_home}}/bin/catalina.sh start 2>&1"
