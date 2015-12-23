@@ -110,15 +110,44 @@
         jenkins_home: "~/.jenkins"
       }
 
-    # Now the configuration begins. Add a administrator user
-    - { role: "jenkins/user",
+    # Now the configuration begins.
+    # Permissions:
+    #  Computer.:: Slave  (hudson.model.Computer)
+    #  CredentialsProvider:: Permissions  (com.cloudbees.plugins.credentials.CredentialsProvider)
+    #  Hudson:: Overall   (hudson.model.Hudson)
+    #  Item:: Job         (hudson.model.Item)
+    #  Run:: Run          (hudson.model.Run)
+    #  View:: View        (hudson.model.View)
+    #
+    - { role: "jenkins/configuration",
         jenkins_home: "~/.jenkins",
         authentication_strategy: "hudson_private",
         authorization_strategy: "project_matrix",
         users: [
-          { id: 'admin', password: 'admin', email: 'admin@example.com'}
+          {
+          id: 'admin',
+          password: 'admin',
+          fullname: "Technical Administration Account",
+          email: 'admin@example.com',
+          permissions: [ "hudson.model.Hudson.Administer" ]
+          },
+          {
+          id: 'mjansen',
+          password: 'mjansen',
+          email: 'mjansen@example.com',
+          fullname: "Michael Jansen",
+          permissions: [ "hudson.model.Hudson.Administer" ]
+          },
+          {
+          id: 'test1',
+          password: 'mjansen',
+          email: 'mjansen@example.com',
+          fullname: "Michael Jansen",
+          permissions: [ "hudson.model.Computer.Configure", "hudson.model.Item.Discover", "hudson.model.View.Delete",
+           "hudson.model.Run.Update", "com.cloudbees.plugins.credentials.CredentialsProvider.Update" ]
+          }
         ]
-        }
+      }
 
   post_tasks:
     - name: START TOMCAT
