@@ -70,9 +70,142 @@
     - java_home: "/opt/java/jdk1.8.0_65"
     - tomcat_version: 8.0.29
     - jenkins_version: 1.585
+
     - jenkins_plugins:
-        - name: role-strategy
-          version: 2.2.0
+
+      # CVS Plug-in
+      - name: cvs
+        version: "2.12"
+        enabled: false
+        bundled: true
+        pinned: yes
+
+      # Javadoc Plugin
+      - name: javadoc
+        version: "1.3"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # SSH Credentials Plugin
+      - name: ssh-credentials
+        version: "1.11"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # Mailer Plugin
+      - name: mailer
+        version: "1.16"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # Credentials Plugin
+      - name: credentials
+        version: "1.24"
+        enabled: true
+        bundled: true
+        pinned: true
+
+      # External Monitor Job Type Plugin
+      - name: external-monitor-job
+        version: "1.4"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # SSH Slaves plugin
+      - name: ssh-slaves
+        version: "1.10"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # Ant Plugin
+      - name: ant
+        version: "1.2"
+        enabled: true
+        bundled: true
+        pinned: false
+
+      # Subversion Plug-in
+      - name: subversion
+        version: "2.5.5"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # PAM Authentication plugin
+      - name: pam-auth
+        version: "1.2"
+        enabled: false
+        bundled: true
+        pinned: yes
+
+      # Translation Assistance plugin
+      - name: translation
+        version: "1.12"
+        enabled: false
+        bundled: true
+        pinned: yes
+
+      # Maven Integration plugin
+      - name: maven-plugin
+        version: "2.12.1"
+        enabled: false
+        bundled: true
+        pinned: yes
+
+      # Matrix Project Plugin
+      - name: matrix-project
+        version: "1.4"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # OWASP Markup Formatter Plugin
+      - name: antisamy-markup-formatter
+        version: "1.3"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # JUnit Plugin
+      - name: junit
+        version: "1.10"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # LDAP Plugin
+      - name: ldap
+        version: "1.11"
+        enabled: false
+        bundled: true
+        pinned: yes
+
+      # Role-based Authorization Strategy
+      - name: role-strategy
+        version: "2.2.0"
+        enabled: true
+        bundled: false
+        pinned: false
+
+      # Matrix Authorization Strategy Plugin
+      - name: matrix-auth
+        version: "1.2"
+        enabled: true
+        bundled: true
+        pinned: yes
+
+      # Windows Slaves Plugin
+      - name: windows-slaves
+        version: "1.1"
+        enabled: false
+        bundled: true
+        pinned: yes
+
     - tomcat_home: "/opt/jenkins/tomcat"
 
   pre_tasks:
