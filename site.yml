@@ -317,4 +317,4 @@
   post_tasks:
     - name: START TOMCAT
       # =====================================================================
-      command: "nohup {{tomcat_home}}/bin/catalina.sh start 2>&1"
+      command: "echo nohup {{tomcat_home}}/bin/catalina.sh start 2>&1"
