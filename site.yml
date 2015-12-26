@@ -75,13 +75,14 @@
   vars:
     - java_home: "/opt/java/jdk1.8.0_65"
     - tomcat_version: 8.0.29
+    - tomcat_home: "/opt/jenkins/tomcat"
     - jenkins_version: 1.643
 
     - jenkins_plugins:
       # CVS Plug-in
       - name: cvs
         version: "2.12"
-        enabled: false
+        enabled: true
         bundled: true
         pinned: yes
 
@@ -111,14 +112,21 @@
         version: "1.24"
         enabled: true
         bundled: true
-        pinned: true
+        pinned: yes
+
+      # Script Security Plugin
+      - name: script-security
+        version: "1.15"
+        enabled: true
+        bundled: true
+        pinned: yes
 
       # External Monitor Job Type Plugin
       - name: external-monitor-job
         version: "1.4"
         enabled: true
         bundled: true
-        pinned: yes
+        pinned: false
 
       # SSH Slaves plugin
       - name: ssh-slaves
@@ -137,34 +145,34 @@
       # Subversion Plug-in
       - name: subversion
         version: "2.5.5"
-        enabled: true
+        enabled: false
         bundled: true
         pinned: yes
 
       # PAM Authentication plugin
       - name: pam-auth
         version: "1.2"
-        enabled: false
+        enabled: true
         bundled: true
         pinned: yes
 
       # Translation Assistance plugin
       - name: translation
         version: "1.12"
-        enabled: false
+        enabled: true
         bundled: true
         pinned: yes
 
       # Maven Integration plugin
       - name: maven-plugin
         version: "2.12.1"
-        enabled: false
+        enabled: true
         bundled: true
         pinned: yes
 
       # Matrix Project Plugin
       - name: matrix-project
-        version: "1.4"
+        version: "1.6"
         enabled: true
         bundled: true
         pinned: yes
@@ -186,15 +194,8 @@
       # LDAP Plugin
       - name: ldap
         version: "1.11"
-        enabled: false
-        bundled: true
-        pinned: yes
-
-      # Role-based Authorization Strategy
-      - name: role-strategy
-        version: "2.2.0"
         enabled: true
-        bundled: false
+        bundled: true
         pinned: false
 
       # Matrix Authorization Strategy Plugin
@@ -207,11 +208,37 @@
       # Windows Slaves Plugin
       - name: windows-slaves
         version: "1.1"
-        enabled: false
+        enabled: true
         bundled: true
         pinned: yes
 
-    - tomcat_home: "/opt/jenkins/tomcat"
+      # Job DSL Pluign
+      - name: job-dsl
+        version: "1.41"
+        enabled: true
+        bundled: no
+        pinned: no
+
+      # SCM API Plugin
+      - name: scm-api
+        version: "0.2"
+        enabled: true
+        bundled: no
+        pinned: no
+
+      # GIT Client Plugin
+      - name: git-client
+        version: "1.18.0"
+        enabled: true
+        bundled: no
+        pinned: no
+
+      # Git Plugin
+      - name: git
+        version: "2.4.0"
+        enabled: true
+        bundled: no
+        pinned: no
 
   pre_tasks:
     - name: STOP TOMCAT
