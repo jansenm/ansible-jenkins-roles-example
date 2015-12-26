@@ -75,10 +75,9 @@
   vars:
     - java_home: "/opt/java/jdk1.8.0_65"
     - tomcat_version: 8.0.29
-    - jenkins_version: 1.585
+    - jenkins_version: 1.643
 
     - jenkins_plugins:
-
       # CVS Plug-in
       - name: cvs
         version: "2.12"
