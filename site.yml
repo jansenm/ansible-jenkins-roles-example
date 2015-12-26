@@ -20,6 +20,12 @@
 
   tasks:
 
+    - name: Install git
+      action: zypper
+      args:
+        name: git
+        state: present
+
     - name: Create prefix for java
       file:
       args:
