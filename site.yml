@@ -286,8 +286,12 @@
     #
     - { role: "jenkins/configuration",
         jenkins_home: "~/.jenkins",
+        admin_email: "info@michael-jansen.biz",
         authentication_strategy: "hudson_private",
         authorization_strategy: "project_matrix",
+        smtp_host: 'localhost',
+        smtp_replyto: "info@michael-jansen.biz",
+        bootstrap_git_repo: 'http://192.168.122.1/bootstrap',
         users: [
           {
           id: 'admin',
@@ -308,10 +312,23 @@
           password: 'mjansen',
           email: 'mjansen@example.com',
           fullname: "Michael Jansen",
-          permissions: [ "hudson.model.Computer.Configure", "hudson.model.Item.Discover", "hudson.model.View.Delete",
-           "hudson.model.Run.Update", "com.cloudbees.plugins.credentials.CredentialsProvider.Update" ]
+          permissions: [
+            "hudson.model.Computer.Configure",
+            "hudson.model.Item.Discover",
+            "hudson.model.View.Delete",
+            "hudson.model.Run.Update",
+            "com.cloudbees.plugins.credentials.CredentialsProvider.Update" ]
           }
         ]
+      }
+
+    - { role: "jenkins/configure-proxy",
+        jenkins_home: "~/.jenkins",
+        # proxy_host: "localhost",
+        # proxy_port: "8080",
+        # proxy_no_proxy: "*.default\nlocalhost",
+        # proxy_username: "mjansen",
+        # proxy_password: "dhdhdhdh"
       }
 
   post_tasks:
