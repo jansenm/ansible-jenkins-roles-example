@@ -38,7 +38,7 @@
     - name: Create prefix for tomcat
       file:
       args:
-        path: "/opt/apache/tomcat"
+        path: "/opt/apache-tomcat"
         state: "directory"
         mode: "0700"
         owner: "jenkins"
@@ -63,7 +63,11 @@
 
   roles:
 
-    - { role: "lang/java/oracle",
+    - { role: "lang/java/oracle-sdk",
+        platform: "linux-x64",
+        version: "1.8.0_65",
+        format: "tar.gz",
+        build: 17
       }
 
 - name: Execute jenkins install
@@ -75,10 +79,12 @@
   vars:
     - java_home: "/opt/java/jdk1.8.0_65"
     - tomcat_version: 8.0.29
-    - tomcat_home: "/opt/jenkins/tomcat"
+    - tomcat_checksum: "4b7ba7a5af0a5c395c0740fc011b59d1"
+    - catalina_base: "/opt/jenkins/tomcat"
     - jenkins_version: 1.643
 
     - jenkins_plugins:
+
       # CVS Plug-in
       - name: cvs
         version: "2.12"
@@ -243,21 +249,21 @@
   pre_tasks:
     - name: STOP TOMCAT
       # =====================================================================
-      command: "nohup {{tomcat_home}}/bin/catalina.sh stop 2>&1"
+      command: "nohup {{catalina_base}}/bin/catalina.sh stop 2>&1"
       ignore_errors: true
 
   roles:
 
     # This will download and install tomcat on the remote server to apache_tomcat_prefix
-    - { role: "apache/tomcat-8",
-        tomcat_version: "{{tomcat_version}}",
-        tomcat_checksum: "4b7ba7a5af0a5c395c0740fc011b59d1"
+    - { role: "apache/tomcat-8-install",
+        version: "{{tomcat_version}}",
+        checksum: "{{tomcat_checksum}}"
       }
 
     # This will create a tomcat instance at CATALINA_BASE
     - { role: "apache/tomcat-8-instance",
-        catalina_base: "/opt/jenkins/tomcat",
-        catalina_home: "/opt/apache/tomcat/apache-tomcat-{{tomcat_version}}",
+        catalina_base: "{{catalina_base}}",
+        catalina_home: "/opt/apache-tomcat/apache-tomcat-{{tomcat_version}}",
         # The rest is optional
         server_port: 9009,
         http_connector_port: 8000,
@@ -266,13 +272,16 @@
 
     # deploy jenkins to JENKINS_HOME
     - { role: "jenkins/core",
-        tomcat_home: "/opt/jenkins/tomcat",
+        catalina_base: "{{catalina_base}}",
+        version: "{{jenkins_version}}",
+        checksum: "{{jenkins_checksum}}",
         jenkins_home: "~/.jenkins"
       }
 
     # install, disable jenkins plugins in JENKINS_HOME
     - { role: "jenkins/plugins",
-        jenkins_home: "~/.jenkins"
+        jenkins_home: "~/.jenkins",
+        plugins: "{{jenkins_plugins}}"
       }
 
     # Now the configuration begins.
@@ -334,4 +343,4 @@
   post_tasks:
     - name: START TOMCAT
       # =====================================================================
-      command: "echo nohup {{tomcat_home}}/bin/catalina.sh start 2>&1"
+      command: "nohup {{catalina_base}}/bin/catalina.sh start 2>&1"
