@@ -285,22 +285,12 @@
       }
 
     # Now the configuration begins.
-    # Permissions:
-    #  Computer.:: Slave  (hudson.model.Computer)
-    #  CredentialsProvider:: Permissions  (com.cloudbees.plugins.credentials.CredentialsProvider)
-    #  Hudson:: Overall   (hudson.model.Hudson)
-    #  Item:: Job         (hudson.model.Item)
-    #  Run:: Run          (hudson.model.Run)
-    #  View:: View        (hudson.model.View)
     #
-    - { role: "jenkins/configuration",
+    - { role: "jenkins/configure",
         jenkins_home: "~/.jenkins",
         admin_email: "info@michael-jansen.biz",
         authentication_strategy: "hudson_private",
         authorization_strategy: "project_matrix",
-        smtp_host: 'localhost',
-        smtp_replyto: "info@michael-jansen.biz",
-        bootstrap_git_repo: 'http://192.168.122.1/bootstrap',
         users: [
           {
           id: 'admin',
@@ -331,6 +321,14 @@
         ]
       }
 
+    - { role: "jenkins/configure-email-notification",
+        jenkins_home: "~/.jenkins",
+        smtp_replyto: "mike@michael-jansen.name",
+        smtp_host: "smtp.1und1.de",
+        smtp_username: "info@michael-jansen.biz",
+        smtp_password: "<enter password here>"
+      }
+
     - { role: "jenkins/configure-proxy",
         jenkins_home: "~/.jenkins",
         # proxy_host: "localhost",
@@ -338,6 +336,11 @@
         # proxy_no_proxy: "*.default\nlocalhost",
         # proxy_username: "mjansen",
         # proxy_password: "dhdhdhdh"
+      }
+
+    - { role: "jenkins/bootstrap-job",
+        jenkins_home: "~/.jenkins",
+        git_repo: 'http://192.168.122.1/bootstrap'
       }
 
   post_tasks:
