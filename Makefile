@@ -1,5 +1,3 @@
-# Test
-
 
 ifndef DEBUG
 .SILENT:
@@ -10,6 +8,6 @@ RST2HTML=rst2html
 all: roles/README.html
 
 roles/README.html: roles/README.rst
-	@echo "Converting README.rst"
-	$(RST2HTML) roles/README.rst > roles/README.html
+	@echo "Converting roles/README.rst"
+	cd roles; $(RST2HTML) README.rst > README.html
 

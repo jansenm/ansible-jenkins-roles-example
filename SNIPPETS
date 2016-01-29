@@ -1,0 +1,71 @@
+
+- name: INSTALL | START TOMCAT
+  # =====================================================================
+  command: "nohup {{catalina_base}}/bin/catalina.sh start 2>&1"
+  when: apache_tomcat_start == True
+
+- name: INSTALL | WAIT FOR TOMCAT
+  # =====================================================================
+  wait_for: port=8080 delay={{ startup_delay_s | default(10) }}
+  when: apache_tomcat_start == True
+
+
+
+
+
+
+- name: INSTALL | START TOMCAT
+  # =====================================================================
+  command: "nohup {{apache_tomcat_home}}/bin/catalina.sh start 2>&1"
+  when: jenkins_core_start == True
+
+- name: INSTALL | WAIT FOR TOMCAT
+  # =====================================================================
+  wait_for: port=8080 delay={{ startup_delay_s | default(10) }}
+  when: jenkins_core_start == True
+
+- name: JENKINS ¦ SETUP | WAIT FOR JENKINS
+  # =====================================================================
+  action: get_url
+  args:
+      force: true
+      url: "{{jenkins_url}}/view/All/builds"
+      dest: "/tmp"
+  register: r_get_url
+  until: r_get_url.msg is defined and r_get_url.msg.find("OK") != -1
+  retries: 10
+  delay: 6
+
+
+
+println(Jenkins.getInstance().getSecurityRealm())
+println(Jenkins.getInstance().getAuthorizationStrategy())
+println(Jenkins.getInstance().isUseSecurity())
+println(Jenkins.getInstance().getSecurity())
+
+for (plugin in Jenkins.instance.pluginManager.plugins)
+{
+  pinned = plugin.pinned
+  if (plugin.hasUpdate())
+  {
+    if (plugin.bundled)
+    {
+      pinned = false
+    }
+    version = plugin.updateInfo.version
+  }
+  else
+  {
+    version = plugin.version
+  }
+
+  println("""\
+    # ${plugin.displayName}
+    - name: ${plugin.shortName}
+      version: "${version}"
+      enabled: ${plugin.active}
+      bundled: ${plugin.bundled}
+      pinned: ${pinned}
+    """.stripIndent())
+
+}

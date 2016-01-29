@@ -288,7 +288,10 @@
     #
     - { role: "jenkins/configure",
         jenkins_home: "~/.jenkins",
-        admin_email: "info@michael-jansen.biz",
+        #admin_email: "info@michael-jansen.biz",
+        number_of_executors: "4",
+        node_mode: "normal",
+        node_labels: "my super lablels",
         authentication_strategy: "hudson_private",
         authorization_strategy: "project_matrix",
         users: [
@@ -344,6 +347,7 @@
       }
 
   post_tasks:
+
     - name: START TOMCAT
       # =====================================================================
       command: "nohup {{catalina_base}}/bin/catalina.sh start 2>&1"
