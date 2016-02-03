@@ -1,3 +1,5 @@
-ansible_ssh_user: maintenance
+ansible_ssh_user: "maintenance"
 
-cache_directory: ~/download-cache
+install_prefix: "/opt"
+
+cache_directory: "~/download-cache"

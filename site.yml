@@ -29,7 +29,7 @@
     - name: Create prefix for java
       file:
       args:
-        path: "/opt/java"
+        path: "/{{install_prefix}}/java"
         state: "directory"
         mode: "0755"
         owner: "root"
@@ -38,7 +38,7 @@
     - name: Create prefix for tomcat
       file:
       args:
-        path: "/opt/apache-tomcat"
+        path: "/{{install_prefix}}/apache-tomcat"
         state: "directory"
         mode: "0700"
         owner: "jenkins"
@@ -47,12 +47,20 @@
     - name: Create prefix for jenkins
       file:
       args:
-        path: "/opt/jenkins"
+        path: "/{{install_prefix}}/jenkins"
         state: "directory"
         mode: "0700"
         owner: "jenkins"
         group: "jenkins"
 
+    - name: Create prefix for groovy
+      file:
+      args:
+        path: "/{{install_prefix}}/groovy-sdk"
+        state: "directory"
+        mode: "0700"
+        owner: "jenkins"
+        group: "jenkins"
 
 - name: Execute java install
   sudo: true
@@ -67,8 +75,20 @@
         platform: "linux-x64",
         version: "1.8.0_65",
         format: "tar.gz",
-        build: 17
+        build: "17"
       }
+
+    - { role: "lang/java/oracle-sdk",
+        platform: "linux-x64",
+        version: "1.8.0_73",
+        format: "tar.gz",
+        build: "02"
+      }
+
+    - { role: "lang/groovy",
+        version: "2.4.5"
+      }
+
 
 - name: Execute jenkins install
   sudo: true
@@ -77,10 +97,10 @@
   gather_facts: No
 
   vars:
-    - java_home: "/opt/java/jdk1.8.0_65"
+    - java_home: "/{{install_prefix}}/java/jdk1.8.0_65"
     - tomcat_version: 8.0.29
     - tomcat_checksum: "4b7ba7a5af0a5c395c0740fc011b59d1"
-    - catalina_base: "/opt/jenkins/tomcat"
+    - catalina_base: "/{{install_prefix}}/jenkins/tomcat"
     - jenkins_version: 1.643
 
     - jenkins_plugins:
@@ -263,7 +283,7 @@
     # This will create a tomcat instance at CATALINA_BASE
     - { role: "apache/tomcat-8/instance",
         catalina_base: "{{catalina_base}}",
-        catalina_home: "/opt/apache-tomcat/apache-tomcat-{{tomcat_version}}",
+        catalina_home: "/{{install_prefix}}/apache-tomcat/apache-tomcat-{{tomcat_version}}",
         # The rest is optional
         server_port: 9009,
         http_connector_port: 8000,
