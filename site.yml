@@ -287,7 +287,8 @@
         # The rest is optional
         server_port: 9009,
         http_connector_port: 8000,
-        ajp_connector_port: 8001
+        ajp_connector_port: 8001,
+        manager_apps: []
       }
 
     # deploy jenkins to JENKINS_HOME
