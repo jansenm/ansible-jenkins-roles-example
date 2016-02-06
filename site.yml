@@ -4,6 +4,56 @@
   hosts: jenkins
   gather_facts: No
 
+  pre_tasks:
+
+    - name: Install git
+      action: zypper
+      args:
+        name: git
+        state: present
+
+  post_tasks:
+
+    - name: Create prefix for java
+      file:
+      args:
+        path: "/{{install_prefix}}/java"
+        state: "directory"
+        mode: "0755"
+
+    - name: Create prefix for tomcat
+      file:
+      args:
+        path: "/{{install_prefix}}/apache-tomcat"
+        state: "directory"
+        mode: "0755"
+
+    - name: Create prefix for jenkins
+      file:
+      args:
+        path: "/{{install_prefix}}/jenkins"
+        state: "directory"
+        mode: "0755"
+        owner: "jenkins"
+        group: "jenkins"
+
+    - name: Create prefix for groovy
+      file:
+      args:
+        path: "/{{install_prefix}}/groovy-sdk"
+        state: "directory"
+        mode: "0755"
+
+    - name: Create prefix for jenkins_home
+      file:
+      args:
+        path: "/var/jenkins"
+        state: "directory"
+        mode: "0755"
+        owner: "jenkins"
+        group: "jenkins"
+
+
   roles:
 
     - { role: "os/group"
@@ -18,56 +68,15 @@
        ,system: True
        }
 
-  tasks:
-
-    - name: Install git
-      action: zypper
-      args:
-        name: git
-        state: present
-
-    - name: Create prefix for java
-      file:
-      args:
-        path: "/{{install_prefix}}/java"
-        state: "directory"
-        mode: "0755"
-        owner: "root"
-        group: "root"
-
-    - name: Create prefix for tomcat
-      file:
-      args:
-        path: "/{{install_prefix}}/apache-tomcat"
-        state: "directory"
-        mode: "0700"
-        owner: "jenkins"
-        group: "jenkins"
-
-    - name: Create prefix for jenkins
-      file:
-      args:
-        path: "/{{install_prefix}}/jenkins"
-        state: "directory"
-        mode: "0700"
-        owner: "jenkins"
-        group: "jenkins"
-
-    - name: Create prefix for groovy
-      file:
-      args:
-        path: "/{{install_prefix}}/groovy-sdk"
-        state: "directory"
-        mode: "0700"
-        owner: "jenkins"
-        group: "jenkins"
-
-- name: Execute java install
+- name: Requirements for jenkins deployment
   sudo: true
   hosts: jenkins
   gather_facts: No
 
   vars:
+
+    - tomcat_version: 8.0.29
+    - tomcat_checksum: "4b7ba7a5af0a5c395c0740fc011b59d1"
 
   roles:
 
@@ -89,6 +98,13 @@
         version: "2.4.5"
       }
 
+    # This will download and install tomcat on the remote server to apache_tomcat_prefix
+    - { role: "apache/tomcat-8/install",
+        version: "{{tomcat_version}}",
+        checksum: "{{tomcat_checksum}}"
+      }
+
+
 
 - name: Execute jenkins install
   sudo: true
@@ -102,7 +118,7 @@
     - tomcat_checksum: "4b7ba7a5af0a5c395c0740fc011b59d1"
     - catalina_base: "/{{install_prefix}}/jenkins/tomcat"
     - jenkins_version: 1.643
-
+    - jenkins_home: "/var/jenkins"
     - jenkins_plugins:
 
       # CVS Plug-in
@@ -267,18 +283,13 @@
         pinned: no
 
   pre_tasks:
+
     - name: STOP TOMCAT
       # =====================================================================
       command: "nohup {{catalina_base}}/bin/catalina.sh stop 2>&1"
       ignore_errors: true
 
   roles:
-
-    # This will download and install tomcat on the remote server to apache_tomcat_prefix
-    - { role: "apache/tomcat-8/install",
-        version: "{{tomcat_version}}",
-        checksum: "{{tomcat_checksum}}"
-      }
 
     # This will create a tomcat instance at CATALINA_BASE
     - { role: "apache/tomcat-8/instance",
@@ -296,19 +307,16 @@
         catalina_base: "{{catalina_base}}",
         version: "{{jenkins_version}}",
         checksum: "{{jenkins_checksum}}",
-        jenkins_home: "~/.jenkins"
       }
 
     # install, disable jenkins plugins in JENKINS_HOME
     - { role: "jenkins/plugins",
-        jenkins_home: "~/.jenkins",
         plugins: "{{jenkins_plugins}}"
       }
 
     # Now the configuration begins.
     #
     - { role: "jenkins/configure",
-        jenkins_home: "~/.jenkins",
         #admin_email: "info@michael-jansen.biz",
         number_of_executors: "4",
         node_mode: "normal",
@@ -346,7 +354,6 @@
       }
 
     - { role: "jenkins/configure-email-notification",
-        jenkins_home: "~/.jenkins",
         smtp_replyto: "mike@michael-jansen.name",
         smtp_host: "smtp.1und1.de",
         smtp_username: "info@michael-jansen.biz",
@@ -354,7 +361,6 @@
       }
 
     - { role: "jenkins/configure-proxy",
-        jenkins_home: "~/.jenkins",
         # proxy_host: "localhost",
         # proxy_port: "8080",
         # proxy_no_proxy: "*.default\nlocalhost",
@@ -363,7 +369,6 @@
       }
 
     - { role: "jenkins/bootstrap-job",
-        jenkins_home: "~/.jenkins",
         git_repo: 'http://192.168.122.1/bootstrap'
       }
 
