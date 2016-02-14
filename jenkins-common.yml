@@ -1,0 +1,62 @@
+---
+
+- include: groups.yml
+
+- include: jenkins-common-suse.yml
+
+- name: "JENKINS COMMON CONFIGURATION"
+  hosts: jenkins-slave:jenkins-host
+  become: yes
+
+  pre_tasks:
+
+    - name: "CREATE INSTALL LOCATION FOR JAVA"
+    # =========================================================================
+      file:
+        path: "{{install_prefix}}/java"
+        state: "directory"
+        mode: "0755"
+
+    - name: "CREATE INSTALL LOCATION FOR APACHE TOMCAT"
+    # =========================================================================
+      file:
+        path: "{{install_prefix}}/apache-tomcat"
+        state: "directory"
+        mode: "0755"
+
+    - name: "CREATE INSTALL LOCATION FOR GROOVY SDK"
+    # =========================================================================
+      file:
+        path: "{{install_prefix}}/groovy-sdk"
+        state: "directory"
+        mode: "0755"
+
+    - name: "CREATE INSTALL LOCATION FOR JENKINS"
+    # =========================================================================
+      file:
+        path: "{{install_prefix}}/jenkins"
+        state: "directory"
+        mode: "0755"
+
+  roles:
+
+    # INSTALL ORACLE JAVA SDK
+    - { role: "lang/java/oracle-sdk",
+        platform: "linux-x64",
+        version: "1.8.0_65",
+        format: "tar.gz",
+        build: "17"
+      }
+
+    - { role: "lang/java/oracle-sdk",
+        platform: "linux-x64",
+        version: "1.8.0_73",
+        format: "tar.gz",
+        build: "02"
+      }
+
+    # INSTALL GROOVY SDK
+    - { role: "lang/groovy",
+        version: "2.4.5"
+      }
+

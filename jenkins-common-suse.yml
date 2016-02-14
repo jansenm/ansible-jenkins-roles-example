@@ -1,0 +1,14 @@
+---
+- name: "PREPARE | DISTRIBUTION SPECIFIC SETUP"
+  hosts: os_openSUSE-Leap
+  become: yes
+
+  tasks:
+
+    - name: "PREPARE | INSTALL REQUIRED SOFTWARE"
+      # =========================================================================
+      zypper:
+        name: "{{item}}"
+        state: "present"
+      with_items:
+        - git

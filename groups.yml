@@ -1,0 +1,16 @@
+---
+- name: "FACT BASED GROUPING"
+  hosts: all
+  gather_facts: true
+
+  tasks:
+
+  - name: "ADD DISTRIBUTION SPECIFIC GROUP"
+    # =========================================================================
+    group_by:
+      key: "os_{{ansible_distribution}}"
+
+  - name: "ADD DISTRIBUTION RELEASE SPECIFIC GROUPS"
+    # =========================================================================
+    group_by:
+      key: "os_{{ansible_distribution}}_{{ansible_distribution_version}}"

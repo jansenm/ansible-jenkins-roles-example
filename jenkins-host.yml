@@ -1,0 +1,12 @@
+---
+- name: "JENKINS HOST"
+  hosts: jenkins-host
+  become: yes
+
+  roles:
+
+    # INSTALL APACHE TOMCAT 8
+    - { role: "apache/tomcat-8/install",
+        version: "8.0.32",
+        checksum: "TODO"
+      }

@@ -1,0 +1,5 @@
+
+# This is where all software installed with non distribution methods will end up. I normally prefer /opt but use
+# this here to make sure /opt is not hardcoded anywhere :)
+install_prefix: "/space"
+

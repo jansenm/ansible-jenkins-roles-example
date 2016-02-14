@@ -1,0 +1,171 @@
+install_prefix: "/space"
+
+java_home: "{{install_prefix}}/java/jdk1.8.0_65"
+tomcat_version: 8.0.32
+catalina_home: "{{install_prefix}}/apache-tomcat/apache-tomcat-{{tomcat_version}}"
+jenkins_instance_name: "root-jenkins"
+catalina_base: "{{install_prefix}}/jenkins/{{jenkins_instance_name}}/tomcat"
+jenkins_home:  "{{install_prefix}}/jenkins/{{jenkins_instance_name}}/jenkins_home"
+jenkins_version: 1.643
+jenkins_plugins:
+
+# CVS Plug-in
+- name: cvs
+  version: "2.12"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Javadoc Plugin
+- name: javadoc
+  version: "1.3"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# SSH Credentials Plugin
+- name: ssh-credentials
+  version: "1.11"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Mailer Plugin
+- name: mailer
+  version: "1.16"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Credentials Plugin
+- name: credentials
+  version: "1.24"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Script Security Plugin
+- name: script-security
+  version: "1.15"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# External Monitor Job Type Plugin
+- name: external-monitor-job
+  version: "1.4"
+  enabled: true
+  bundled: true
+  pinned: false
+
+# SSH Slaves plugin
+- name: ssh-slaves
+  version: "1.10"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Ant Plugin
+- name: ant
+  version: "1.2"
+  enabled: true
+  bundled: true
+  pinned: false
+
+# Subversion Plug-in
+- name: subversion
+  version: "2.5.5"
+  enabled: false
+  bundled: true
+  pinned: yes
+
+# PAM Authentication plugin
+- name: pam-auth
+  version: "1.2"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Translation Assistance plugin
+- name: translation
+  version: "1.12"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Maven Integration plugin
+- name: maven-plugin
+  version: "2.12.1"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Matrix Project Plugin
+- name: matrix-project
+  version: "1.6"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# OWASP Markup Formatter Plugin
+- name: antisamy-markup-formatter
+  version: "1.3"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# JUnit Plugin
+- name: junit
+  version: "1.10"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# LDAP Plugin
+- name: ldap
+  version: "1.11"
+  enabled: true
+  bundled: true
+  pinned: false
+
+# Matrix Authorization Strategy Plugin
+- name: matrix-auth
+  version: "1.2"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Windows Slaves Plugin
+- name: windows-slaves
+  version: "1.1"
+  enabled: true
+  bundled: true
+  pinned: yes
+
+# Job DSL Pluign
+- name: job-dsl
+  version: "1.41"
+  enabled: true
+  bundled: no
+  pinned: no
+
+# SCM API Plugin
+- name: scm-api
+  version: "0.2"
+  enabled: true
+  bundled: no
+  pinned: no
+
+# GIT Client Plugin
+- name: git-client
+  version: "1.18.0"
+  enabled: true
+  bundled: no
+  pinned: no
+
+# Git Plugin
+- name: git
+  version: "2.4.0"
+  enabled: true
+  bundled: no
+  pinned: no
