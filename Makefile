@@ -5,9 +5,10 @@ endif
 
 RST2HTML=rst2html
 
-all: roles/README.html
+all: roles/README.html README.html
 
-roles/README.html: roles/README.rst
-	@echo "Converting roles/README.rst"
-	cd roles; $(RST2HTML) README.rst > README.html
+%.html: %.rst
+	@echo "Converting $*.rst"
+	$(RST2HTML) $*.rst > $*.html
+
 

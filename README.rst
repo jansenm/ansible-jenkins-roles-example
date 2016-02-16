@@ -30,7 +30,7 @@ Jenkins Slave::
 
    - Maven
    - Gradle
-   - ....
+   - <your requirement here>
 
 Implementation
 ==============
