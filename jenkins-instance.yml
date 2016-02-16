@@ -34,18 +34,20 @@
 
     # This will create a tomcat instance at CATALINA_BASE
     - { role: "apache/tomcat-8/instance",
-        #catalina_base: "{{catalina_base}}",
-        #catalina_home: "{{catalina_home}}",
-        # The rest is optional
-        server_port: 9009,
-        http_connector_port: 8000,
-        ajp_connector_port: 8001,
         manager_apps: []
+      }
+
+    ## This would copy over the default configuration
+    #- { role: "apache/tomcat-8/configuration-default",
+    #  }
+
+    # This will copy a custom configuration into the tomcat
+    - { role: "apache/tomcat-8/configuration-copy",
+        configuration: "{{playbook_dir}}/files/jenkins-root/tomcat/conf"
       }
 
     # deploy jenkins to JENKINS_HOME
     - { role: "jenkins/deploy",
-        catalina_base: "{{catalina_base}}",
         version: "{{jenkins_version}}",
         checksum: "{{jenkins_checksum}}",
         context_path: "ROOT"
