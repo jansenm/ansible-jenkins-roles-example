@@ -3,23 +3,29 @@
   hosts: jenkins-instance
   become: yes
 
-  roles:
+  tasks:
 
-    - { role: "os/group"
-       ,name: "jenkins"
-      }
+    - name: "PRE_TASK | CREATE JENKINS SYSTEM GROUP"
+      # =====================================================================
+      group:
+        name: "jenkins"
+        system: yes
+        state: "present"
 
-    - { role: "os/user"
-       ,name: "jenkins"
-       ,group: "jenkins"
-       ,comment: "System user for jenkins installation"
-       ,state: "present"
-       ,system: True
-       }
+    - name: "PRE_TASK | CREATE JENKINS USER"
+      # =====================================================================
+      user:
+        name: "jenkins"
+        group: "jenkins"
+        comment: "System user for jenkins instances."
+        system: yes
+        shell: "/bin/sh"
+        createhome: yes
+        state: "present"
 
-  post_tasks:
-
-    - file:
+    - name: "PRE_TASK | CREATE JENKINS INSTANCE ROOT"
+      # =====================================================================
+      file:
         dest: "{{install_prefix}}/jenkins/{{jenkins_instance_name}}"
         owner: "jenkins"
         mode: "0700"
