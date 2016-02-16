@@ -1,5 +1,5 @@
 ---
-- name: "INSTANCE SPECIFIC SETUP"
+- name: "INSTANCE SPECIFIC SETUP (ROOT)"
   hosts: jenkins-instance
   become: yes
 
@@ -29,6 +29,13 @@
   hosts: jenkins-instance
   become: yes
   become_user: jenkins
+
+  pre_tasks:
+
+    - name: "PRE_TASK | STOP TOMCAT"
+      # =====================================================================
+      command: "nohup {{catalina_base}}/bin/catalina.sh stop 2>&1"
+      ignore_errors: true
 
   roles:
 
@@ -115,3 +122,9 @@
     - { role: "jenkins/bootstrap-job",
         git_repo: 'http://192.168.122.1/bootstrap'
       }
+
+  post_tasks:
+
+    - name: START TOMCAT
+      # =====================================================================
+      command: "nohup {{catalina_base}}/bin/catalina.sh start 2>&1"

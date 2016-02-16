@@ -1,17 +1,6 @@
 ---
+
 - include: jenkins-common.yml
 - include: jenkins-host.yml
 - include: jenkins-instance.yml
 
-  pre_tasks:
-
-    - name: STOP TOMCAT
-      # =====================================================================
-      command: "nohup {{catalina_base}}/bin/catalina.sh stop 2>&1"
-      ignore_errors: true
-
-  post_tasks:
-
-    - name: START TOMCAT
-      # =====================================================================
-      command: "nohup {{catalina_base}}/bin/catalina.sh start 2>&1"
