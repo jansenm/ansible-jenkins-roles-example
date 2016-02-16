@@ -35,7 +35,7 @@ Jenkins Slave::
 Implementation
 ==============
 
-A jenkins instance is defined as a ansible host in the inventory like this:
+A jenkins instance is defined as a ansible host in the inventory like this::
 
     [jenkins-instance]
     project-jenkins ansible_ssh_host=jenkins-devel
@@ -43,12 +43,12 @@ A jenkins instance is defined as a ansible host in the inventory like this:
 The `ansible_ssh_host` variable tells ansible on which host this `virtual host` is located. The real host needs to
 have the `jenkins-master` host group assigned or the install will fail.
 
-The jenkins master is defined like this:
+The jenkins master is defined like this::
 
     [jenkins-host]
     jenkins-devel
 
-And a slave surprisingly like this:
+And a slave surprisingly like this::
 
     [jenkins-slave]
     jenkins-slave-host
